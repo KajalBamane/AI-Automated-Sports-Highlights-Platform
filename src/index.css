@@ -1,0 +1,210 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AI Football Highlights Platform - Dark Editor Theme */
+
+@layer base {
+  :root {
+    --background: 220 20% 10%;
+    --foreground: 210 20% 95%;
+
+    --card: 220 18% 13%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 220 18% 13%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 152 60% 45%;
+    --primary-foreground: 220 20% 10%;
+
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 210 20% 90%;
+
+    --muted: 220 15% 20%;
+    --muted-foreground: 215 15% 55%;
+
+    --accent: 152 50% 35%;
+    --accent-foreground: 210 20% 95%;
+
+    --destructive: 0 65% 50%;
+    --destructive-foreground: 210 20% 95%;
+
+    --success: 152 60% 45%;
+    --success-foreground: 220 20% 10%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 220 20% 10%;
+
+    --border: 220 15% 22%;
+    --input: 220 15% 18%;
+    --ring: 152 60% 45%;
+
+    --radius: 0.5rem;
+
+    /* Custom tokens for video editor */
+    --surface-elevated: 220 18% 16%;
+    --surface-glass: 220 18% 13% / 0.8;
+    --highlight-goal: 152 70% 50%;
+    --highlight-foul: 0 70% 55%;
+    --highlight-penalty: 38 90% 55%;
+    --highlight-crowd: 200 70% 50%;
+    --timeline-bg: 220 20% 8%;
+    --timeline-track: 220 15% 25%;
+    --progress-glow: 152 60% 45% / 0.4;
+
+    --sidebar-background: 220 18% 11%;
+    --sidebar-foreground: 210 20% 90%;
+    --sidebar-primary: 152 60% 45%;
+    --sidebar-primary-foreground: 220 20% 10%;
+    --sidebar-accent: 220 15% 20%;
+    --sidebar-accent-foreground: 210 20% 90%;
+    --sidebar-border: 220 15% 22%;
+    --sidebar-ring: 152 60% 45%;
+  }
+
+  .dark {
+    --background: 220 20% 10%;
+    --foreground: 210 20% 95%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-muted/30 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/30 rounded-full hover:bg-muted-foreground/50 transition-colors;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-card/80 backdrop-blur-md border border-border/50 rounded-lg;
+  }
+
+  .highlight-card {
+    @apply bg-card border border-border/50 rounded-lg transition-all duration-200;
+  }
+
+  .highlight-card:hover {
+    @apply border-primary/50 shadow-lg;
+    box-shadow: 0 0 20px hsl(var(--progress-glow));
+  }
+
+  .timeline-marker {
+    @apply absolute top-0 bottom-0 w-1 bg-primary rounded-full cursor-pointer transition-all;
+    box-shadow: 0 0 8px hsl(var(--primary));
+  }
+
+  .video-container {
+    @apply relative overflow-hidden rounded-lg bg-black;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .editor-panel {
+    @apply bg-card/60 backdrop-blur-sm border border-border/40 rounded-lg p-4;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .status-badge-goal {
+    @apply bg-[hsl(var(--highlight-goal))]/20 text-[hsl(var(--highlight-goal))];
+  }
+
+  .status-badge-foul {
+    @apply bg-[hsl(var(--highlight-foul))]/20 text-[hsl(var(--highlight-foul))];
+  }
+
+  .status-badge-penalty {
+    @apply bg-[hsl(var(--highlight-penalty))]/20 text-[hsl(var(--highlight-penalty))];
+  }
+
+  .status-badge-crowd {
+    @apply bg-[hsl(var(--highlight-crowd))]/20 text-[hsl(var(--highlight-crowd))];
+  }
+
+  .glow-button {
+    @apply relative overflow-hidden;
+  }
+
+  .glow-button::before {
+    content: '';
+    @apply absolute inset-0 bg-primary/20 blur-xl opacity-0 transition-opacity duration-300;
+  }
+
+  .glow-button:hover::before {
+    @apply opacity-100;
+  }
+
+  .progress-bar {
+    @apply h-1 bg-muted rounded-full overflow-hidden;
+  }
+
+  .progress-bar-fill {
+    @apply h-full bg-gradient-to-r from-primary to-accent transition-all duration-300;
+    box-shadow: 0 0 10px hsl(var(--primary));
+  }
+
+  .nav-link {
+    @apply flex items-center gap-2 px-4 py-2 rounded-lg text-muted-foreground transition-all duration-200;
+  }
+
+  .nav-link:hover {
+    @apply bg-muted/50 text-foreground;
+  }
+
+  .nav-link.active {
+    @apply bg-primary/10 text-primary;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 5px hsl(var(--primary) / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(var(--primary) / 0.8);
+    }
+  }
+
+  .animate-scan {
+    animation: scan 2s linear infinite;
+  }
+
+  @keyframes scan {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(200%);
+    }
+  }
+}

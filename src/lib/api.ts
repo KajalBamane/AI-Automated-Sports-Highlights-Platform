@@ -1,7 +1,21 @@
 import { Highlight, VideoMetadata } from "@/types";
 
+
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+console.log("API_BASE_URL =", API_BASE_URL);
+
+
+/* ===================== HEALTH ===================== */
+export async function checkBackendHealth(): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/health`);
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
 
 /* ===================== UPLOAD ===================== */
 export async function uploadVideo(
@@ -28,12 +42,13 @@ export async function uploadVideo(
         filename: res.video.filename,
         duration: res.video.duration,
         sport: "football",
-        path: res.video.path, // "/uploads/xxx.mp4"
+        path: res.video.path,
       });
     };
 
     xhr.onerror = () => reject("Upload failed");
-    xhr.open("POST", `${API_BASE_URL}/upload/video`);
+
+    xhr.open("POST", `${API_BASE_URL}/api/upload`);
     xhr.send(formData);
   });
 }
@@ -43,7 +58,7 @@ export async function detectHighlights(
   videoPath: string,
   duration: number,
 ): Promise<Highlight[]> {
-  const res = await fetch(`${API_BASE_URL}/highlights/detect`, {
+  const res = await fetch(`${API_BASE_URL}/api/highlights/detect`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ videoPath, duration }),
@@ -76,7 +91,7 @@ export async function exportHighlights(
   videoFilename: string,
   highlights: Pick<Highlight, "id" | "start" | "end" | "label">[],
 ): Promise<ExportResult> {
-  const res = await fetch(`${API_BASE_URL}/export/clips`, {
+  const res = await fetch(`${API_BASE_URL}/api/export/clips`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ videoFilename, highlights }),
@@ -87,20 +102,7 @@ export async function exportHighlights(
 
   if (!data.success) throw new Error(data.error || "Export failed");
 
-  const base = API_BASE_URL.replace("/api", "");
-
-  return {
-    clips: data.clips.map((c) => ({
-      ...c,
-      url: base + c.url,
-      downloadUrl: base + c.downloadUrl,
-    })),
-    reel: {
-      ...data.reel,
-      url: base + data.reel.url,
-      downloadUrl: base + data.reel.downloadUrl,
-    },
-  };
+  return data;
 }
 
 /* ===================== DOWNLOAD ===================== */
@@ -109,12 +111,4 @@ export function downloadFile(url: string, filename: string) {
   a.href = url;
   a.download = filename;
   a.click();
-}
-export async function checkBackendHealth(): Promise<boolean> {
-  try {
-    const res = await fetch("http://localhost:3001/api/health");
-    return res.ok;
-  } catch {
-    return false;
-  }
 }

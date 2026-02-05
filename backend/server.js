@@ -14,7 +14,7 @@ const detectRoutes = require("./routes/detectRoutes");
 const exportRoutes = require("./routes/exportRoutes");
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 10000; // ✅ Render uses 10000
 
 // Middleware
 app.use(cors());
@@ -23,11 +23,11 @@ app.use(express.json());
 // Create folders if they don't exist
 const uploadFolder = path.join(
   __dirname,
-  process.env.UPLOAD_FOLDER || "uploads",
+  process.env.UPLOAD_FOLDER || "uploads"
 );
 const outputFolder = path.join(
   __dirname,
-  process.env.OUTPUT_FOLDER || "outputs",
+  process.env.OUTPUT_FOLDER || "outputs"
 );
 
 if (!fs.existsSync(uploadFolder)) {
@@ -47,15 +47,17 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/highlights", detectRoutes);
 app.use("/api/export", exportRoutes);
 
-// ✅ HEALTH CHECK — THIS IS CRITICAL
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "Backend is running" });
+// ✅ REQUIRED HEALTH CHECK FOR RENDER
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Backend running at http://localhost:${PORT}`);
-});
+// Root route (optional, but helpful)
 app.get("/", (req, res) => {
   res.send("Backend is running. Use /api/* endpoints.");
+});
+
+// ✅ IMPORTANT: 0.0.0.0 for Render
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Backend running on port ${PORT}`);
 });

@@ -23,7 +23,7 @@
     "noFallthroughCasesInSwitch": false,
 
     /* ✅ ADD THIS */
-    "ignoreDeprecations": "6.0",
+     
 
     /* Path aliases */
     "baseUrl": ".",

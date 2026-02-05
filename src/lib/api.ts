@@ -10,7 +10,7 @@ console.log("API_BASE_URL =", API_BASE_URL);
 /* ===================== HEALTH ===================== */
 export async function checkBackendHealth(): Promise<boolean> {
   try {
-    const res = await fetch(`${API_BASE_URL}/api/process`);
+    const res = await fetch(`${API_BASE_URL}/api/upload`);
     return res.ok;
   } catch {
     return false;

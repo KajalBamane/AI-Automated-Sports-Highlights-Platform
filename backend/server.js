@@ -24,6 +24,13 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "Backend is running" });
 });
 
+app.post("/api/process", (req, res) => {
+  res.json({
+    success: true,
+    message: "Process endpoint working",
+  });
+});
+
 // Create folders if they don't exist
 const uploadFolder = path.join(
   __dirname,
@@ -52,9 +59,9 @@ app.use("/api/highlights", detectRoutes);
 app.use("/api/export", exportRoutes);
 
 // ✅ REQUIRED HEALTH CHECK FOR RENDER
-app.get("/health", (req, res) => {
-  res.status(200).send("OK");
-});
+// app.get("/health", (req, res) => {
+//   res.status(200).send("OK");
+// });
 
 // Root route (optional, but helpful)
 app.get("/", (req, res) => {
